@@ -1,7 +1,7 @@
 Package: ws.hbang.argon
 Name: Argon
 Depends: mobilesubstrate
-Version: 0.0.1-16
+Version: 0.0.1-25
 Architecture: iphoneos-arm
 Description: An awesome MobileSubstrate tweak!
 Maintainer: HASHBANG Productions
