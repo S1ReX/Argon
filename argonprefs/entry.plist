@@ -1,0 +1,10 @@
+{
+    entry = {
+	bundle = ArgonPrefs;
+	cell = PSLinkCell;
+	detail = ArgonPrefsListController;
+	icon = ArgonPrefs.png;
+	isController = 1;
+	label = ArgonPrefs;
+    };
+}
