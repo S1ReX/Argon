@@ -24,18 +24,13 @@ static BOOL staggered = YES;
 		int firstVisible = MSHookIvar<int>(self, "_firstVisibleIconIndex");
 		int lastVisible = MSHookIvar<int>(self, "_lastVisibleIconIndex");
 
-		NSMutableArray *iconViews = [[NSMutableArray alloc] init];
-		NSMutableArray *oldRects = [[NSMutableArray alloc] init];
-
 		float delay = 0.0f;
-		for (int i = firstVisible; i < lastVisible; i++)
+		for (int i = firstVisible; i <= lastVisible; i++)
 		{
 			NSString *identifier = [[self displayIdentifiers] objectAtIndex:i];
 			SBIconView *iconView = [self visibleIconViewForDisplayIdentifier:identifier];
-			[iconViews addObject:iconView];
 
 			CGRect oldRect = iconView.frame;
-			[oldRects addObject:[NSValue valueWithCGRect:oldRect]];
 			CGRect newRect = oldRect;
 			newRect.origin.y -= self.frame.size.height;
 			iconView.frame = newRect;
