@@ -9,10 +9,17 @@
 - (id)visibleIconViewForDisplayIdentifier:(id)arg1;
 @end
 
+typedef NS_ENUM(NSInteger, AGDirection) {
+    AGDirectionUp,
+    AGDirectionDown
+};
+
 static float duration = 0.3f;
 static float delayInterval = 0.2f;
 
 static BOOL staggered = YES;
+
+static AGDirection animationDirection = AGDirectionDown;
 
 %hook SBAppSwitcherBarView
 
@@ -24,7 +31,7 @@ static BOOL staggered = YES;
 		int firstVisible = MSHookIvar<int>(self, "_firstVisibleIconIndex");
 		int lastVisible = MSHookIvar<int>(self, "_lastVisibleIconIndex");
 
-		float delay = 0.0f;
+		float delay = (animationDirection == AGDirectionUp ? 0.1f : 0.0f);
 		for (int i = firstVisible; i <= lastVisible; i++)
 		{
 			NSString *identifier = [[self displayIdentifiers] objectAtIndex:i];
@@ -32,7 +39,7 @@ static BOOL staggered = YES;
 
 			CGRect oldRect = iconView.frame;
 			CGRect newRect = oldRect;
-			newRect.origin.y -= self.frame.size.height;
+			newRect.origin.y += (animationDirection == AGDirectionUp ? 1 : -1) * self.frame.size.height;
 			iconView.frame = newRect;
 
 			[UIView beginAnimations:nil context:NULL];
@@ -49,7 +56,8 @@ static BOOL staggered = YES;
 		UIView *_contentView = MSHookIvar<UIView *>(self, "_scrollView");
 		_contentView.alpha = 0;
 		CGRect _originalFrame = _contentView.frame;
-		_contentView.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, _contentView.frame.origin.y - _contentView.frame.size.height);
+		float yOffset = _contentView.frame.origin.y + ((animationDirection == AGDirectionUp ? 2 : -1) * _contentView.frame.size.height);
+		_contentView.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, yOffset);
 
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.5];
